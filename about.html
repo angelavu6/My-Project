@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Shin's Webpage </title>
+        <link rel="stylesheet" href="styles.css"> <!-- If you want to share the same style -->
+        <style>
+            body {
+                font-family: 'Roboto', serif;
+                margin: 0;
+                text-align: center;
+                background-color: #032b5b;
+                color: white; /* Default text color */
+                line-height: 1.6; /* Improved readability */
+            }
+            h1{
+                color: #f0f0f0; /* White color for header */
+            }
+
+            p {
+                font-size: 1rem;
+                margin: 20px;
+                color: #d1d1d1;
+            }
+
+            #show-confirm-btn {
+                padding: 12px 25px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                cursor: pointer;
+                background-color: #08439c; /* Darker blue for button */
+                color: white;
+                border-radius: 25px; /* Rounded button */
+                margin-top: 20px;
+                transition: all 0.3s ease; /* Smooth transition for hover effect */
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+                border: none; /* Remove default border */
+            }
+
+            /* Button hover effect */
+            #show-confirm-btn:hover{
+                background-color: #1a57b8; /* Lighter blue on hover */
+                transform: translateY(-2px); /* Slight lift effect */
+                box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Deeper shadow on hover */
+            }
+
+            /* Button focus effect */
+            #show-confirm-btn:focus {
+                outline: none; /* Remove default focus outline */
+                box-shadow: 0 0 0 4px rgba(13, 95, 200, 0.3); /* Custom focus ring */
+            }
+
+            #hidden-message {
+                display: none; /* Hidden by default */
+                color: #f0f0f0; 
+                margin-top: 20px;
+                font-size: 1.1rem;
+                font-weight: bold;
+            }
+
+            #first-message {
+                color: #ff0000; /* Red color for the first message */
+                font-size: 1.2rem;
+                font-weight: bold;
+            }
+
+            .image-gallery{
+                margin-bottom: 40px;
+                padding: 20px;
+                display: flex;
+                justify-content: center; /* Center the images */
+                gap: 20px; /* Space between images */
+                flex-wrap: wrap; /* Allow images to wrap on smaller screens */
+            }
+            .image-gallery img{
+                width: 200px;
+                height: auto;
+                border-radius: 10px; /* Rounded corners for images */
+                box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+                transition: transform 0.3s ease; /* Smooth transition for hover effect */
+            }
+
+            .image-gallery img:hover{
+                transform: scale(1.05); /* Slight zoom effect on hover */
+            }
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1000; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                background-color: rgba(0, 0, 0, 0.9); /* Black background with opacity */
+                display: flex; /* Use flex to center the modal content */
+                justify-content: center; /* Center horizontally */
+                align-items: center; /* Center vertically */
+                overflow: hidden; /* Prevent scrolling */
+                padding: 20px; /* Padding around the modal content */
+                box-sizing: border-box; /* Include padding in width and height calculations */
+            }
+
+            .model-content {
+                max-width: 95vw; /* Image can take up to 95% of the viewport width */
+                max-height: 95vh; /* Image can take up to 95% of the viewport height */
+                width: auto; /* Maintain aspect ratio */
+                height: auto; /* Maintain aspect ratio */
+                object-fit: contain; /* Ensures the entire image is visible */
+                border-radius: 10px; /* Rounded corners */
+            }
+
+            .modal img{
+                max-width: 100%; /* Image can take up to 90% of the modal width */
+                max-height: 100%; /* Image can take up to 90% of the modal height */
+            }
+
+            #caption {
+                margin: auto;
+                text-align: center;
+                color: #f1f1f1;
+                padding: 10px 0;
+                font-size: 18px;
+            }
+
+            .close{
+                position: absolute;
+                top: 20px;
+                right: 35px;
+                color: #ffffff;
+                font-size: 40px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #bbbbbb;
+                text-decoration: none;
+            }
+
+        </style>
+    </head>
+    <link rel="stylesheet" href="menu.css"> <!-- If you want to share the same style -->
+    <body>
+        <header>
+            <h1> About Shin Shin's Webpage </h1>
+            <p> Welcome! You have come to the right place to find out what this webpage is all about!</p>
+        </header>
+
+        <!-- Menu Button -->
+        <button id="menu-btn">☰ Menu</button>
+
+        <!-- Sidebar -->
+        <nav id="sidebar">
+        <a href="shinheanweb.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="messages.html">Messages</a>
+        <a href="gallery.html">Gallery</a>
+        <!-- Add more links here if needed -->
+        </nav>
+
+        <!-- Overlay for dark background when sidebar opens -->
+        <div id="overlay"></div>
+
+
+        <main>
+            <p id="first-message"> ⚠️ First off, this webpage is for Shin Shin only. If you are not Shin Shin, please exit and never come back 🔪🔪🔪🔪</p>
+
+            <!-- Button to reveal hidden message-->
+            <button id="show-confirm-btn">Yes, I can confirm I am Shin :D</button>
+            
+            <!-- Hidden messgae that will appear after button click -->
+            <div id="hidden-message">
+                <P> Now, HI BABYYYYYYY!!! Good job you made it here heheheheh</P>
+                <p> This webpage is your <i>personalised webpage...</i> If there is anything you want integrated you can let me know okie</p>
+                <p> Otherwise, just enjoy, look around and <b>MOST IMPORTANTLY...</b> <i><b>I HOPE YOU LOVE IT !!!!</b></i></p>
+                <p> I LOVE YOU </p>
+            </div>
+        </main>
+
+        <div class="image-gallery">
+            <img src="manga pic 1.png" alt="Manga Pic 1" class="gallery-image" onclick="openModal(this)">   
+            <img src="manga pic 3.png" alt="Manga Pic 2" class="gallery-image" onclick="openModal(this)">
+            <img src="manga pic 2.png" alt="Manga Pic 3" class="gallery-image" onclick="openModal(this)">
+        </div>
+
+        <!-- Modal Container -->
+        <div id="modal-container" class="modal" style="display: none;" onclick="closeModal(event)">
+            <span class="close" onclick="closeModal(event)">&times;</span>
+            <img class="modal-content" id="modalImg">
+        </div>
+
+        <script>
+            // Hide modal on page load
+            window.onload = function(){
+                document.getElementById('modal-container').style.display = "none"; // Hide modal on load
+            }
+
+            function openModal(img){
+                const modal = document.getElementById('modal-container');
+                const modalImg = document.getElementById('modalImg');
+
+                modal.style.display = "block";
+                modalImg.src = img.src; // Set the image source to the clicked image
+            }
+
+            function closeModal(event){
+                const modal = document.getElementById('modal-container');
+                // If clicked on the background (not the image) or the close button, close the modal
+                if (event.target === modal || event.target.classList.contains('close')) {
+                    modal.style.display = "none";
+                }
+            }
+
+            const button = document.getElementById('show-confirm-btn');
+            const firstMessage = document.getElementById('first-message');
+            // Hidden message that will appear after button click
+            const hiddenMessage = document.getElementById('hidden-message');    
+
+            // Event listener for the button click
+            button.addEventListener('click', function() {
+                firstMessage.style.display = 'none'; // Hide the button after click
+                hiddenMessage.style.display = 'block'; // Show the hidden message
+                button.style.display = 'none'; // Hide the button after click
+            });
+        </script>
+        <script src="menu.js"></script>
+
+    </body>

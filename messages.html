@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shin's Messages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="menu.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #032b5b;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        select {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1rem;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 180px;
+            height: 120px;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            perspective: 800px;
+            transition: background-color 0.3s ease;
+        }
+
+        .envelope .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: inherit;
+            border-bottom: 2px solid #ccc;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+            z-index: 2;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .envelope.open .flap {
+            transform: rotateX(-120deg);
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            color: #333;
+            padding: 10px;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            transform: translateY(100%);
+            transition: transform 0.5s ease 0.3s;
+            z-index: 1;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .envelope.open .letter {
+            transform: translateY(0%);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .modal-content {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        /* Style the emoji on the envelope */
+        .emoji {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 2rem;
+            z-index: 3;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Menu Button -->
+    <button id="menu-btn">☰ Menu</button>
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+    <a href="shinheanweb.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="messages.html">Messages</a>
+    <a href="gallery.html">Gallery</a>
+    <!-- Add more links here if needed -->
+    </nav>
+
+    <!-- Overlay for dark background when sidebar opens -->
+    <div id="overlay"></div>
+
+    <h1>🍬🍩 Welcome to Sweet Paradise !!! 🍭🧁🎂</h1>
+    <p>💌 Click an envelope to open it 💌</p>
+
+    <label for="categoryFilter">Filter by category:</label>
+    <select id="categoryFilter">
+        <option value="all">All</option>
+        <option value="love">Sweets</option>
+        <option value="encouragement">Chocolates</option>
+        <option value="how i feel about shin">Ice Cream</option>
+        <option value="messages for occasions">Cake</option>
+    </select>
+
+    <div class="container" id="messageContainer"></div>
+
+    <!-- Modal -->
+    <div class="modal" id="messageModal">
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
+    <script>
+        let allMessages = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("messages.json")
+                .then(response => response.json())
+                .then(json => {
+                    allMessages = json;
+                    displayMessages(allMessages);
+                });
+
+            document.getElementById("categoryFilter").addEventListener("change", function () {
+                const selected = this.value;
+                const filtered = selected === "all"
+                    ? allMessages
+                    : allMessages.filter(msg => msg.category === selected);
+                displayMessages(filtered);
+            });
+        });
+
+        function displayMessages(messages) {
+            const container = document.getElementById("messageContainer");
+            container.innerHTML = "";
+            messages.forEach((msg, i) => {
+                const env = document.createElement("div");
+                env.className = "envelope";
+                env.style.backgroundColor = getPastel(i);
+
+                const flap = document.createElement("div");
+                flap.className = "flap";
+
+                const letter = document.createElement("div");
+                letter.className = "letter";
+                letter.innerHTML = `<p>${msg.message}</p>`;
+
+                const emoji = document.createElement("div");
+                emoji.className = "emoji";
+                emoji.innerHTML = getCategoryEmoji(msg.category); // Add emoji to envelope
+
+                env.appendChild(flap);
+                env.appendChild(letter);
+                env.appendChild(emoji); // Attach emoji to envelope
+
+                env.addEventListener("click", () => {
+                    openModal(msg.message, env); // Open modal and pass the envelope
+                    env.classList.toggle("open");
+                });
+
+                container.appendChild(env);
+            });
+        }
+
+        function getCategoryEmoji(category) {
+            const emojis = {
+                "love": "🍬",                // Candy for love category
+                "encouragement": "🍫",       // Chocolate for encouragement
+                "how i feel about shin": "🍦", // Ice cream for Shin category
+                "messages for occasions": "🍰",     // Cake for ocassion messages
+            };
+            return emojis[category] || "🍭";  // Default candy emoji
+        }
+
+        function openModal(message, env) {
+            const modal = document.getElementById("messageModal");
+            const modalContent = document.getElementById("modalContent");
+            modalContent.innerHTML = `<p>${message}</p>`;
+            modal.classList.add("open");
+
+            // Close modal and envelope when clicked outside
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) {  // Ensure the click is outside the modal content
+                    modal.classList.remove("open");
+                    env.classList.remove("open"); // Close the envelope when modal is closed
+                }
+            });
+        }
+
+        function getPastel(index) {
+            const colors = ["#ffd1dc", "#d1e0ff", "#d9f8c4", "#fceabb", "#e0bbf9"];
+            return colors[index % colors.length];
+        }
+    </script>
+    <script src="menu.js"></script>
+</body>
+</html>
